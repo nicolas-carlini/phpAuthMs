@@ -2,8 +2,9 @@
 
 namespace App\Acme;
 
-include '../app/vendor/autoload.php';
+use \Exception;
 
+include '../app/vendor/autoload.php';
 
 class User
 {
@@ -18,11 +19,15 @@ class User
     //login
     public function signin($email, $pwd)
     {
-        return $this->loginCapsule($email, $pwd);
+        try{
+            return [$this->loginCapsule($email, $pwd),false];
+        }catch(Exception $e){
+            return [false,false];
+        }
     }
 
     //registro
-    public function singup($email, $name, $pwd)
+    public function signup($email, $name, $pwd)
     {
         if ($this->usableEmail($email)) {
             $newUser = array(
@@ -37,36 +42,60 @@ class User
             $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
             $this->validateEmail($email, $newUser["validCode"]);
             $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+            return true;
         };
+
+        return false;
     }  
 
     //cambiar password atravez del login
     public function changePasswordByLogin($email, $pwd, $newPwd)
     {
-        if ($this->loginCapsule($email, $pwd)) {
-            $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
-            $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
-            $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+        try{
+            if ($this->loginCapsule($email, $pwd)) {
+                $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
+                $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
+                $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+                return true;
+            }
+
+            return false;
+        }catch(Exception $e){
+            return false;
         }
     }
 
     //cambiar password atravez de verificacion de email
     public function changePasswordByEmail($email, $pwd, $newPwd)
     {
-        if ($this->loginCapsule($email, $pwd)) {
-            $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
-            $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
-            $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+        try{
+            if ($this->loginCapsule($email, $pwd)) {
+                $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
+                $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
+                $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+                return true;
+            }
+
+            return false;
+        }catch(Exception $e){
+            return false;
         }
     }
 
     //confirma email
     public function confirmEmail($email, $validCode)
     {
-        if ($this->validCode($email, $validCode)) {
-            $this->bulk->update(['email' => $email], ['$set' => ['confirmEmail' => true]]);
-            $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
-            $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+        try{
+            if ($this->validCode($email, $validCode)) {
+                $this->bulk->update(['email' => $email], ['$set' => ['confirmEmail' => true]]);
+                $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
+                $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+                return true;
+            }
+
+            return false;
+        }catch(Exception $e){
+            return false;
         }
     }
 
