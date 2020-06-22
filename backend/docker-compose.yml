@@ -12,7 +12,6 @@ services:
             - "./web:/web"
         depends_on:
             - "php"
-            - "mongodb"
     php:
         image: nanoninja/php-fpm
         restart: always
@@ -24,12 +23,3 @@ services:
         volumes:
             - ./web/app:/app
         command: install
-    mongodb:
-        image: mongo
-        container_name: mongo
-        restart: always
-        volumes:
-            - ./data/db/mongo:/data/db
-        ports:
-            - "27020:27017"
-        command: --storageEngine wiredTiger

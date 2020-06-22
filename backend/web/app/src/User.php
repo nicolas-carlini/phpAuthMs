@@ -1,5 +1,7 @@
 <?php
 
+//debug valid email failed 
+//
 
 @include '../app/vendor/autoload.php';
 
@@ -37,7 +39,7 @@ class User
 
       $this->bulk->insert($newUser);
       $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
-      $this->validateEmail($email, $newUser["validCode"]);
+      //$this->validateEmail($email, $newUser["validCode"]);
       $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
       return true;
     };
@@ -140,7 +142,8 @@ class User
       $emailCount++;
     }
 
-    return ($emailCount > 0);
+    return true; //debug
+    //return ($emailCount > 0);
   }
 
   //hashea la password
