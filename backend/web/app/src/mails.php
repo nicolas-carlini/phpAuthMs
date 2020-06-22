@@ -20,12 +20,11 @@ class mailer
       $this->mail->isSMTP();                                            // Send using SMTP
       $this->mail->Host       = 'smtp1.gmail.com';                    // Set the SMTP server to send through
       $this->mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-      $this->mail->Username   = 'user@example.com';                     // SMTP username
-      $this->mail->Password   = 'secret';                               // SMTP password
+      $this->mail->Username   = 'CARLINI.NOREPLY@gmail.com';                     // SMTP username
+      $this->mail->Password   = 'pepe2020';                               // SMTP password
       $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
       $this->mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-    } catch (Exception $e) {
-    }
+    } catch (Exception $e) {}
   }
 
   function send()

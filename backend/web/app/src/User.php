@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Acme;
 
-use \Exception;
-
-include '../app/vendor/autoload.php';
+@include '../app/vendor/autoload.php';
 
 class User
 {
@@ -66,10 +63,10 @@ class User
   }
 
   //cambiar password atravez de verificacion de email
-  public function changePasswordByEmail($email, $pwd, $newPwd)
+  public function changePasswordByEmail($email, $validCode, $newPwd)
   {
     try {
-      if ($this->loginCapsule($email, $pwd)) {
+      if ($this->validCode($email, $validCode)) {
         $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
         $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
@@ -137,8 +134,6 @@ class User
 
     $query = new MongoDB\Driver\Query($filter, $options);
     $rows = $this->manager->executeQuery('db.collectionName', $query);
-
-    var_dump($rows);
 
     $emailCount = 0;
     foreach ($rows as $document) {
