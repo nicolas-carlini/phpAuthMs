@@ -11,6 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   $User = new User();
   try {
     $result = $User->signin($_POST["email"], $_POST["pwd"]);
+
+    foreach ($result as $document) {
+      var_dump($document);
+    }
+    
     $payload = ["isLogged" => $result[0], "error" => $result[1]];
   } catch (Exception $e) {
     echo $e;

@@ -129,7 +129,7 @@ class User
       var_dump($document);
     }
 
-    return $this->validePassword($this->unhashPwd($pwd, $rows[0]["password"]), $pwd);
+    return $cursor;
   }
 
   //valida que el email no este registrado en la base de datos
