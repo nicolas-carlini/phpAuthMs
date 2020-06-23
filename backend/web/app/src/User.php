@@ -121,7 +121,11 @@ class User
     ];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $rows = $this->manager->executeQuery('db.collectionName', $query);
+    $cursor = $this->manager->executeQuery('db.collectionName', $query);
+
+    foreach ($cursor as $document) {
+      var_dump($document);
+    }
 
     return $this->validePassword($this->unhashPwd($pwd, $rows[0]["password"]), $pwd);
   }
