@@ -9,7 +9,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   include '../../app/src/User.php';
   $User = new User();
-
   try {
     $payload = ["isRegistered" => $User->signup($_POST["email"], $_POST["name"], $_POST["pwd"]), "error" => false];
   } catch (Exception $e) {

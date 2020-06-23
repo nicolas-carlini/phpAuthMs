@@ -8,6 +8,7 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 
 
+
 class mailer
 {
   // Instantiation and passing `true` enables exceptions
@@ -24,7 +25,9 @@ class mailer
       $this->mail->Password   = 'pepe2020';                               // SMTP password
       $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
       $this->mail->Port       = 587;                                    // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
-    } catch (Exception $e) {}
+    } catch (Exception $e) {
+      echo $e;
+    }
   }
 
   function send()
@@ -47,6 +50,7 @@ class mailer
 
       return true;
     } catch (Exception $e) {
+      echo $e;
       return false;
     }
   }

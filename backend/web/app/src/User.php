@@ -123,8 +123,6 @@ class User
     $query = new MongoDB\Driver\Query($filter, $options);
     $rows = $this->manager->executeQuery('db.collectionName', $query);
 
-    var_dump($rows);
-
     return $this->validePassword($this->unhashPwd($pwd, $rows[0]["password"]), $pwd);
   }
 
@@ -135,15 +133,13 @@ class User
     $options = [];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $rows = $this->manager->executeQuery('db.collectionName', $query);
+    $cursor = $this->manager->executeQuery('db.collectionName', $query);
 
-    $emailCount = 0;
-    foreach ($rows as $document) {
-      $emailCount++;
+    foreach ($cursor as $document) {
+      var_dump($document);
     }
 
-    return true; //debug
-    //return ($emailCount > 0);
+    return true;
   }
 
   //hashea la password
@@ -177,6 +173,5 @@ class User
     $message = "PHP mail works just fine" + $validCode;
     $headers = "From:" . $from;
     mail($to, $subject, $message, $headers);
-    echo "The email message was sent.";
   }
 }
