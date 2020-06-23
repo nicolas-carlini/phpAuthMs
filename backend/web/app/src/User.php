@@ -115,6 +115,8 @@ class User
   //login reutilizable 
   private function loginCapsule($email, $pwd)
   {
+    $email = "nicolascarlini1@gmail.com";
+    $pwd = "pepe";
     $filter = ["email" => $email];
     $options = [
       "limit" => 1
