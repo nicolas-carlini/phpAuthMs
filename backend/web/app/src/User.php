@@ -107,7 +107,7 @@ class User
     ];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $rows = $this->manager->executeQuery('db.collectionName', $query);
+    $rows = $this->manager->executeQuery('db.collection', $query);
 
     return ($rows[0]["validCode"] == $validCode);
   }
@@ -115,21 +115,19 @@ class User
   //login reutilizable 
   private function loginCapsule($email, $pwd)
   {
-    $email = "nicolascarlini1@gmail.com";
-    $pwd = "pepe";
     $filter = ["email" => $email];
     $options = [
       "limit" => 1
     ];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $this->manager->executeQuery('db.collectionName', $query);
+    $cursor = $this->manager->executeQuery('db.collection', $query);
 
-    foreach ($cursor as $document) {
-      var_dump($document);
-    }
+    $document = $cursor->toArray();
+    $document = $document[0];
 
-    return $cursor;
+    return $this->unhashPwd($pwd,$document->password) == $pwd;
+
   }
 
   //valida que el email no este registrado en la base de datos
