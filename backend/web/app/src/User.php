@@ -1,8 +1,8 @@
 <?php
 
-//debug valid email failed 
-//
+//debug valid email failed
 
+@include './mails.php';
 @include '../app/vendor/autoload.php';
 
 class User
@@ -107,9 +107,12 @@ class User
     ];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $rows = $this->manager->executeQuery('db.collection', $query);
+    $cursor = $this->manager->executeQuery('db.collection', $query);
 
-    return ($rows[0]["validCode"] == $validCode);
+    $document = $cursor->toArray();
+    $document = $document[0];
+
+    return $document->validCode == $validCode;
   }
 
   //login reutilizable 
@@ -137,13 +140,11 @@ class User
     $options = [];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $this->manager->executeQuery('db.collectionName', $query);
+    $cursor = $this->manager->executeQuery('db.collection', $query);
 
-    foreach ($cursor as $document) {
-      var_dump($document);
-    }
+    $document = $cursor->toArray();
 
-    return true;
+    return (count($document) < 1)?true:false;
   }
 
   //hashea la password

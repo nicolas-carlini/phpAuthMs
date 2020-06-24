@@ -10,7 +10,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   include '../../app/src/User.php';
   $User = new User();
   try {
-    $payload = ["isRegistered" => $User->signup($_POST["email"], $_POST["name"], $_POST["pwd"]), "error" => false];
+    $email = $_POST["email"];
+    $name = $_POST["name"];
+    $pwd = $_POST["pwd"]);
+
+    if($pwd != null && $email != null && $name != null){
+      $payload = ["isRegistered" => $User->signup($email, $name, $pwd, "error" => false];
+    }
+    else{
+      $payload = ["isRegistered" => false, "error" => true];
+    }
   } catch (Exception $e) {
     $payload = ["isRegistered" => false, "error" => true];
   } finally {

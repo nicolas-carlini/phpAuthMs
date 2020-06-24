@@ -7,12 +7,19 @@ if(true){
   header("Access-Control-Max-Age: 3600");
   header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 }
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   include '../../app/src/User.php';
   $User = new User();
   try {
-    $result = $User->signin($_POST["email"], $_POST["pwd"]);
-    $payload = ["isLogged" => $result[0], "error" => $result[1]];
+    $email = $_POST["email"];
+    $pwd = $_POST["pwd"];
+    if($pwd != null && $email != null){
+      $result = $User->signin($email,$pwd);
+      $payload = ["isLogged" => $result[0], "error" => $result[1]];
+    }
+    else{
+      $payload = ["isLogged" => false, "error" => true];
+    }
   } catch (Exception $e) {
     echo $e;
     $payload = ["isLogged" => false, "error" => true];
