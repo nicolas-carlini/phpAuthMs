@@ -1,11 +1,17 @@
 <?php
 
-// Load Composer's autoloader
-include '../app/vendor/autoload.php';
-require 'vendor/autoload.php';
-// Import PHPMailer classes into the global namespace
-// These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer;
+@include './mailerSrc/Exception.php';
+@include './mailerSrc/PHPMailer.php';
+@include './mailerSrc/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+if(class_exists("PHPMailer")) {
+  echo "EUREKA!";
+} else {
+  echo "Still not loading...";
+}
 
 class mailer
 {
