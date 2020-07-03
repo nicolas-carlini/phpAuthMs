@@ -39,7 +39,6 @@ class User
 
       $this->bulk->insert($newUser);
       $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
-      //$this->validateEmail($email, $newUser["validCode"]);
       $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
       return true;
     };
@@ -52,23 +51,6 @@ class User
   {
     try {
       if ($this->loginCapsule($email, $pwd)) {
-        $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
-        $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
-        $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
-        return true;
-      }
-
-      return false;
-    } catch (Exception $e) {
-      return false;
-    }
-  }
-
-  //cambiar password atravez de verificacion de email
-  public function changePasswordByEmail($email, $validCode, $newPwd)
-  {
-    try {
-      if ($this->validCode($email, $validCode)) {
         $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
         $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
@@ -97,7 +79,7 @@ class User
       return false;
     }
   }
-
+/*
   //valida el codigo resivido 
   private function validCode($email, $validCode)
   {
@@ -114,7 +96,7 @@ class User
 
     return $document->validCode == $validCode;
   }
-
+*/
   //login reutilizable 
   private function loginCapsule($email, $pwd)
   {
@@ -169,7 +151,8 @@ class User
     return ($vp == $pwd);
   }
 
-  //temas de emails, alta paja la verdad
+  /*
+  //temas de emails
   private function validateEmail($email, $validCode)
   {
     $from = "test@hostinger-tutorials.com";
@@ -179,4 +162,5 @@ class User
     $headers = "From:" . $from;
     mail($to, $subject, $message, $headers);
   }
+*/
 }

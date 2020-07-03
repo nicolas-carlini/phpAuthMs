@@ -12,10 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
     $email = $_POST["email"];
     $name = $_POST["name"];
-    $pwd = $_POST["pwd"]);
+    $pwd = $_POST["pwd"];
 
     if($pwd != null && $email != null && $name != null){
-      $payload = ["isRegistered" => $User->signup($email, $name, $pwd, "error" => false];
+      $payload = ["isRegistered" => $User->signup($email, $name, $pwd), "error" => false];
     }
     else{
       $payload = ["isRegistered" => false, "error" => true];
