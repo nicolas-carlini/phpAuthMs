@@ -78,7 +78,7 @@ class User
       $this->bulk->insert($newUser);
       $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
       $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
-      $this->validateEmail();
+      $this->validateEmail($email, $validCode);
       return true;
     };
 
@@ -136,9 +136,12 @@ class User
     }
   }
 
-  //valida el codigo resivido 
-  private function validCode($email, $validCode)
-  {
+  //manda el email para recuperar la password
+  public function sendEmail($email){
+    $this->validateEmail($email,$this->getValidCode($email));
+  }
+
+  private function getValidCode($email){
     $filter = ["email" => $email];
     $options = [
       "limit" => 1
@@ -150,7 +153,13 @@ class User
     $document = $cursor->toArray();
     $document = $document[0];
 
-    return $document->validCode == $validCode;
+    return $document->validCode;
+  }
+
+  //valida el codigo resivido 
+  private function validCode($email, $validCode)
+  {
+    return $this->getValidCode($email) == $validCode;
   }
 
   //login reutilizable 
@@ -210,7 +219,7 @@ class User
   //temas de emails
   private function validateEmail($email, $validCode)
   {
-    $mail = new ApiMails($email,"verificar password","codigo de validacion "+$validCode);
+    $mail = new ApiMails($email,"codigo de validacion ","codigo de validacion "+$validCode);
     return $mail->sendMail();
   }
 

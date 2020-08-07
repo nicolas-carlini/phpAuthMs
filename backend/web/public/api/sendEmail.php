@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
     $email = $_POST["email"];
     
-    $payload = ["changePassword" => $User->changePasswordByEmail($email, $validCode, $newPwd), "error" => false];
+    $payload = ["changePassword" => $User->sendEmail($email), "error" => false];
   } catch (Exception $e) {
     $payload = ["changePassword" => false, "error" => true];
   } finally {
