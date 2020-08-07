@@ -2,6 +2,7 @@
 
 //debug valid email failed
 
+@include './mails.php';
 @include '../app/vendor/autoload.php';
 
 class ApiMails{
@@ -70,14 +71,14 @@ class User
         "name" => $name,
         "email" => $email,
         "password" => $this->hashPwd($pwd),
-        "validCode" => $validCode,
+        "validCode" => rand(10000, 99999),
         "confirmEmail" => false
       );
 
       $this->bulk->insert($newUser);
       $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
       $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
-      $this->validateEmail($email, $validCode);
+      $this->validateEmail();
       return true;
     };
 
@@ -123,7 +124,7 @@ class User
   {
     try {
       if ($this->validCode($email, $validCode)) {
-        $this->bulk->update(['email' => $email], ['$set' => ['confirmEmail' => true,'validCode' => rand(10000, 99999)]]);
+        $this->bulk->update(['email' => $email], ['$set' => ['confirmEmail' => true]]);
         $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
         return true;
@@ -209,13 +210,7 @@ class User
   //temas de emails
   private function validateEmail($email, $validCode)
   {
-    $mail = new ApiMails($email,"verificar password","codigo de validacion $validCode");
-    return $mail->sendMail();
-  }
-
-  private function sendEmailForChangePassword($email)
-  {
-    $mail = new ApiMails($email,"verificar password","codigo de validacion ");
+    $mail = new ApiMails($email,"verificar password","codigo de validacion "+$validCode);
     return $mail->sendMail();
   }
 
