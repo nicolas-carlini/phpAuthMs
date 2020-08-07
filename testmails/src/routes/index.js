@@ -3,6 +3,6 @@ const mailsrouter = require('./mails/mails');
 
 const router = Router();
 
-router.use('/send',mailsrouter);
+router.post('/send',mailsrouter);
 
 module.exports = router;

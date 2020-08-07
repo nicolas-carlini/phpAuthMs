@@ -2,8 +2,10 @@ const nodemailer = require('nodemailer');
 
 module.exports = async (req, res, next) => {
     try {
-        const { mailPostman, pwdPostman, email, name, message } = req.body;
-    
+        const { email, name, message } = req.body;
+        const mailPostman = "correodeuso.cfteam@gmail.com";
+        const pwdPostman = "carliniteamo01";
+
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 587,
