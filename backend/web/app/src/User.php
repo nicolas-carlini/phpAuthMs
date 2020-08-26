@@ -219,7 +219,7 @@ class User
   //temas de emails
   private function validateEmail($email, $validCode)
   {
-    $mail = new ApiMails($email,"codigo de validacion ","codigo de validacion "+$validCode);
+    $mail = new ApiMails($email,"codigo de validacion ","codigo de validacion $validCode");
     return $mail->sendMail();
   }
 
