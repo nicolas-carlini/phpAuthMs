@@ -16,14 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $payload = ["isRegistered" => $User->signup($email, $name, $pwd), "error" => false];
     }
     else{
-      $payload = ["isRegistered" => false, "error" => true];
+      $payload = ["isRegistered" => false, "error" => true, "debug"=>$_POST];
     }
   } catch (Exception $e) {
-    $payload = ["isRegistered" => false, "error" => true];
+    $payload = ["isRegistered" => false, "error" => true, "debug"=>$_POST];
   } finally {
     echo json_encode($payload);
   }
 } else {
-  $payload = ["isRegistered" => false, "error" => true];
+  $payload = ["isRegistered" => false, "error" => true, "debug"=>$_POST];
   echo json_encode($payload);
 }
