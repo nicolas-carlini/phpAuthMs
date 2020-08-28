@@ -3,8 +3,8 @@ services:
     web:
         image: nginx:latest
         ports:
-            - "8000:80"
-            - "80:443"
+            - "80:80"
+            - "8000:443"
             - "587:587"
         restart: always
         volumes:
