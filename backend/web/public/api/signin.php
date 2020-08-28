@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
     $email = $_POST["email"];
     $pwd = $_POST["pwd"];
+    echo "$email $pwd";
     if($pwd != null && $email != null){
       $result = $User->signin($email,$pwd);
       $payload = ["isLogged" => $result[0], "error" => $result[1]];
