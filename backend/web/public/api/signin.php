@@ -25,6 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo json_encode($payload);
   }
 } else {
-  $payload = ["isLogged" => false, "error" => true];
+  $payload = ["isLogged" => false, "error" => true, "postman"=> true];
   echo json_encode($payload);
 }
