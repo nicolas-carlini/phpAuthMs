@@ -8,20 +8,19 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   include '../../app/src/User.php';
   $User = new User();
+  $email = $_POST["email"];
+  $pwd = $_POST["pwd"];
   try {
-    $email = $_POST["email"];
-    $pwd = $_POST["pwd"];
-
     if($pwd != null && $email != null){
       $result = $User->signin($email,$pwd);
       $payload = ["isLogged" => $result[0], "error" => $result[1], "email"=>$email, "pwd"=>$pwd];
     }
     else{
-      $payload = ["isLogged" => false, "error" => true];
+      $payload = ["isLogged" => false, "error" => true, "email"=>$email, "pwd"=>$pwd];
     }
   } catch (Exception $e) {
     echo $e;
-    $payload = ["isLogged" => false, "error" => true];
+    $payload = ["isLogged" => false, "error" => true, "email"=>$email, "pwd"=>$pwd];
   } finally {
     echo json_encode($payload);
   }
