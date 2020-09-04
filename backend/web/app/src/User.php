@@ -138,7 +138,7 @@ class User
 
   //manda el email para recuperar la password
   public function sendEmail($email){
-    $this->validateEmail($email,$this->getValidCode($email));
+    return $this->validateEmail($email,$this->getValidCode($email));
   }
 
   private function getValidCode($email){
