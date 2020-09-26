@@ -151,11 +151,8 @@ class User
     $cursor = $this->manager->executeQuery('db.users', $query);
 
     $document = $cursor->toArray();
-    var_dump($document)
-
     $document = $document[0];
-
-    var_dump($document)
+    
     return $document->validCode;
   }
 
