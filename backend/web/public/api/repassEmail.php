@@ -16,7 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newPwd = $_POST["newPwd"];
     $validCode = $_POST["validCode"];
     
-    $payload = ["changePassword" => $User->changePasswordByEmail($email, $validCode, $newPwd), "error" => false];
+    if($email != null && $newPwd != null && $validCode != null){
+      $payload = ["changePassword" => $User->changePasswordByEmail($email, $validCode, $newPwd), "error" => false];
+    }
   } catch (Exception $e) {
     $payload = ["changePassword" => false, "error" => true];
   } finally {

@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST["email"];
     $name = $_POST["name"];
     $pwd = $_POST["pwd"];
+    
     if($pwd != null && $email != null && $name != null){
       $payload = ["isRegistered" => $User->signup($email, $name, $pwd), "error" => false];
     }

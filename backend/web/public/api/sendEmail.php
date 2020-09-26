@@ -12,8 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $User = new User();
   try {
     $email = $_POST["email"];
-    
-    $payload = ["changePassword" => $User->sendEmail($email), "error" => false];
+
+    if($email != null){
+      $payload = ["changePassword" => $User->sendEmail($email), "error" => false];
+    }
   } catch (Exception $e) {
     $payload = ["changePassword" => false, "error" => true];
   } finally {
