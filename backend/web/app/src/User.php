@@ -45,7 +45,7 @@ class User
 {
   public function __construct()
   {
-    $this->manager = new MongoDB\Driver\Manager('mongodb+srv://nicolas:tkiGFGfVdyBvF18E@cluster0-qnsci.gcp.mongodb.net/PHPNGINX?retryWrites=true&w=majority');
+    $this->manager = new MongoDB\Driver\Manager('mongodb://191.168.0.2:27017');
     $this->writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
     $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
   }
@@ -62,7 +62,7 @@ class User
 
   //registro
   public function signup($email, $name, $pwd)
-  {
+  { 
     if ($this->usableEmail($email)) {
 
       $validCode = rand(10000, 99999);
@@ -76,7 +76,7 @@ class User
       );
 
       $this->bulk->insert($newUser);
-      $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
+      $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
       $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
       $this->validateEmail($email, $validCode);
       return true;
@@ -91,7 +91,7 @@ class User
     try {
       if ($this->loginCapsule($email, $pwd)) {
         $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
-        $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
+        $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
         return true;
       }
@@ -108,7 +108,7 @@ class User
     try {
       if ($this->confirmEmail($email, $validCode)) {
         $this->bulk->update(['email' => $email], ['$set' => ['password' => $this->hashPwd($newPwd)]]);
-        $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
+        $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
         return true;
       }
@@ -125,7 +125,7 @@ class User
     try {
       if ($this->validCode($email, $validCode)) {
         $this->bulk->update(['email' => $email], ['$set' => ['confirmEmail' => true]]);
-        $result = $this->manager->executeBulkWrite('db.collection', $this->bulk, $this->writeConcern);
+        $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
         return true;
       }
@@ -148,11 +148,14 @@ class User
     ];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $this->manager->executeQuery('db.collection', $query);
+    $cursor = $this->manager->executeQuery('db.users', $query);
 
     $document = $cursor->toArray();
+    var_dump($document)
+
     $document = $document[0];
 
+    var_dump($document)
     return $document->validCode;
   }
 
@@ -171,7 +174,7 @@ class User
     ];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $this->manager->executeQuery('db.collection', $query);
+    $cursor = $this->manager->executeQuery('db.users', $query);
 
     $document = $cursor->toArray();
     $document = $document[0];
@@ -187,7 +190,7 @@ class User
     $options = [];
 
     $query = new MongoDB\Driver\Query($filter, $options);
-    $cursor = $this->manager->executeQuery('db.collection', $query);
+    $cursor = $this->manager->executeQuery('db.users', $query);
 
     $document = $cursor->toArray();
 

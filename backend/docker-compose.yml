@@ -13,14 +13,41 @@ services:
             - "./web:/web"
         depends_on:
             - "php"
+        networks:
+            backend:
+                ipv4_address: "191.168.0.4"
     php:
         image: nanoninja/php-fpm
         restart: always
         volumes:
             - "./etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
             - ./web:/web
+        networks:
+            backend:
+                ipv4_address: "191.168.0.3"
     composer:
         image: composer
         volumes:
             - ./web/app:/app
         command: install
+    mongodb:
+        image: mongo
+        container_name: mongo
+        restart: always
+        volumes:
+            - ./data/db/mongo:/data/db
+        ports:
+            - "27020:27017"
+        command: --storageEngine wiredTiger
+        networks:
+            backend:
+                ipv4_address: "191.168.0.2"
+
+networks: 
+  backend:
+    driver: bridge
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: "191.168.0.0/24"

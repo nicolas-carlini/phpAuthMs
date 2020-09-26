@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $User = new User();
   $email = $_POST["email"];
   $pwd = $_POST["pwd"];
+
   try {
     if($pwd != null && $email != null){
       $result = $User->signin($email,$pwd);
