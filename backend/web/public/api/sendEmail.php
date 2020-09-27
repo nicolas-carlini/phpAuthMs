@@ -15,6 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if($email != null){
       $payload = ["changePassword" => $User->sendEmail($email), "error" => false];
+    }else{
+      $payload = ["changePassword" => false, "error" => true];
     }
   } catch (Exception $e) {
     $payload = ["changePassword" => false, "error" => true];

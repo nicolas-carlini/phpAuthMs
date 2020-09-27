@@ -72,7 +72,8 @@ class User
         "email" => $email,
         "password" => $this->hashPwd($pwd),
         "validCode" => rand(10000, 99999),
-        "confirmEmail" => false
+        "confirmEmail" => false,
+        "isAdmin" => false
       );
 
       $this->bulk->insert($newUser);
@@ -152,7 +153,7 @@ class User
 
     $document = $cursor->toArray();
     $document = $document[0];
-    
+
     return $document->validCode;
   }
 
@@ -176,7 +177,9 @@ class User
     $document = $cursor->toArray();
     $document = $document[0];
 
-    return $this->unhashPwd($pwd,$document->password) == $pwd;
+    setcookie('id', $document->_id, time()+(60*60*24*365));
+
+    return $this->unhashPwd($pwd,$document->password) == $pwd && $document->confirmEmail;
 
   }
 

@@ -14,9 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
     $email = $_POST["email"];
     $validCode = $_POST["validcode"];
-    
+
     if($email != null && $validCode != null){
       $payload = ["changePassword" => $User->confirmEmail($email, $validCode), "error" => false];
+    }else{
+      $payload = ["changePassword" => false, "error" => true];
     }
   } catch (Exception $e) {
     $payload = ["changePassword" => false, "error" => true];
