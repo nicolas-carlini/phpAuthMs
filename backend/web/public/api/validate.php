@@ -2,7 +2,7 @@
 
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+header('Access-Control-Allow-Methods: POST');
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST["email"];
     $validCode = $_POST["validcode"];
 
-    if($email != null && $validCode != null){
+    if(isset($email ,$validCode)){
       $payload = ["changePassword" => $User->confirmEmail($email, $validCode), "error" => false];
     }else{
       $payload = ["changePassword" => false, "error" => true];

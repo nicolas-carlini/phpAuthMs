@@ -3,7 +3,7 @@
 header("Content-Type: application/json; charset=UTF-8");
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+header('Access-Control-Allow-Methods: POST');
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -15,21 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST["name"];
     $pwd = $_POST["pwd"];
 
-    if($pwd != null && $email != null && $name != null){
-      $payload = ["isRegistered" => $User->signup($email, $name, $pwd), "error" => false];
+    if(isset($pwd ,$email ,$name)){
+      $payload = ["isRegistered" => $User->signup($email, $name, $pwd), "error" => false, "message"=>"Todo salio bien"];
     }
     else{
-      echo "pepe1";
-      $payload = ["isRegistered" => false, "error" => true];
+      $payload = ["isRegistered" => false, "error" => true, "message"=>"faltan campos"];
     }
   } catch (Exception $e) {
-    echo "pep2";
-    $payload = ["isRegistered" => false, "error" => true];
+    $payload = ["isRegistered" => false, "error" => true, "message"=>"error inesperado"];
   } finally {
     echo json_encode($payload);
   }
 } else {
-  echo "pepe3";
-  $payload = ["isRegistered" => false, "error" => true];
+  $payload = ["isRegistered" => false, "error" => true, "message"=>"metodo no deseado"];
   echo json_encode($payload);
 }

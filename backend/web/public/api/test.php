@@ -12,9 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
     include '../../app/src/User.php';
 
-    $user = new User();
-  
-    $payload = ["isRegistered" => $user->validateEmail(), "error" => false];
+    $post = new Post();
+
   } catch (Exception $e) {
     $payload = ["isRegistered" => false, "error" => true];
   } finally {

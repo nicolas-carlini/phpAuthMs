@@ -178,6 +178,7 @@ class User
     $document = $document[0];
 
     setcookie('id', $document->_id, time()+(60*60*24*365));
+    setcookie('name', $document->name, time()+(60*60*24*365));
 
     return $this->unhashPwd($pwd,$document->password) == $pwd && $document->confirmEmail;
 
@@ -226,4 +227,116 @@ class User
     return $mail->sendMail();
   }
 
+}
+
+class Post {
+
+  public function __construct()
+  {
+    $this->manager = new MongoDB\Driver\Manager('mongodb://191.168.0.2:27017');
+    $this->writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+    $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+  }
+
+  public function addPost($content, $title){
+    try{
+      $newPost = array(
+        "createdBy" => $_COOKIE['id'],
+        "postName" => $_COOKIE['name'],
+        "title" => $title,
+        "content" => $content,
+        "state" => true
+      );
+
+      $this->bulk->insert($newPost);
+      $result = $this->manager->executeBulkWrite('db.posts', $this->bulk, $this->writeConcern);
+      $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+
+      return true;
+    }
+    catch (Exception $e) {
+      return false;
+    }
+  }
+
+  public function addCommit($idPost, $content){
+    try{
+      $newCommit = array(
+        "createdBy" => $_COOKIE['id'],
+        "postName" => $_COOKIE['name'],
+        "postId" => $idPost,
+        "content" => $content,
+        "state" => true
+      );
+
+      $this->bulk->insert($newCommit);
+      $result = $this->manager->executeBulkWrite('db.commits', $this->bulk, $this->writeConcern);
+      $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+
+      return true;
+    }
+    catch (Exception $e) {
+      return false;
+    }
+  }
+
+  public function deleteCommit($idCommit, $idCommiter){
+    try {
+      if($idCommiter == $_COOKIE['id']){
+        $this->bulk->update(['_id' => $idCommit], ['$set' => ['state' => false]]);
+        $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
+        $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+
+        return true;
+      }
+      return false;
+    } catch (Exception $e) {
+      return false;
+    }
+  }
+
+  public function deletePost($idPost, $idPoster){
+    try {
+        if($idPoster == $_COOKIE['id']){
+        $this->bulk->update(['_id' => $idPost], ['$set' => ['state' => false]]);
+        $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
+        $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
+
+        return true;
+      }
+      return false;
+    } catch (Exception $e) {
+      return false;
+    }
+  }
+
+  public function getPosts(){
+   try {
+    $filter = ["state" => true];
+    $options = [
+      "limit" => 30
+    ];
+
+    $query = new MongoDB\Driver\Query($filter, $options);
+    $cursor = $this->manager->executeQuery('db.posts', $query);
+
+    return $cursor->toArray();
+   } catch (Exception $e) {
+     return [];
+   }
+  }
+
+  public function getCommits($idPost){
+    try {
+      $filter = ["state" => true];
+      $options = [];
+
+      $query = new MongoDB\Driver\Query($filter, $options);
+      $cursor = $this->manager->executeQuery('db.commits', $query);
+
+      return $cursor->toArray();
+    } catch (Exception $e) {
+      return [];
+    }
+  }
 }
