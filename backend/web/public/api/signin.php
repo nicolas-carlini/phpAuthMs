@@ -16,18 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
     if(isset($pwd ,$email)){
       $result = $User->signin($email,$pwd);
-      $payload = ["isLogged" => $result[0], "error" => $result[1]];
+      $payload = ["isLogged" => $result[0], "error" => $result[1], "message"=>"Todo salio bien"];
     }
     else{
-      $payload = ["isLogged" => false, "error" => true];
+      $payload = ["isLogged" => false, "error" => true, "message"=>"faltan datos"];
     }
   } catch (Exception $e) {
-    echo $e;
-    $payload = ["isLogged" => false, "error" => true];
+    $payload = ["isLogged" => false, "error" => true, "message"=>"error falta"];
   } finally {
     echo json_encode($payload);
   }
 } else {
-  $payload = ["isLogged" => false, "error" => true];
+  $payload = ["isLogged" => false, "error" => true, "message"=>"metodo no factible"];
   echo json_encode($payload);
 }

@@ -245,7 +245,8 @@ class Post {
         "postName" => $_COOKIE['name'],
         "title" => $title,
         "content" => $content,
-        "state" => true
+        "state" => true,
+        "internalId" => rand(10000, 99999)
       );
 
       $this->bulk->insert($newPost);
@@ -266,7 +267,8 @@ class Post {
         "postName" => $_COOKIE['name'],
         "postId" => $idPost,
         "content" => $content,
-        "state" => true
+        "state" => true,
+        "internalId" => rand(10000, 99999)
       );
 
       $this->bulk->insert($newCommit);
@@ -283,8 +285,8 @@ class Post {
   public function deleteCommit($idCommit, $idCommiter){
     try {
       if($idCommiter == $_COOKIE['id']){
-        $this->bulk->update(['_id' => $idCommit], ['$set' => ['state' => false]]);
-        $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
+        $this->bulk->update(['internalId' => intval($idCommit), 'createdBy' => $idCommiter], ['$set' => ['state' => false]]);
+        $result = $this->manager->executeBulkWrite('db.commits', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
 
         return true;
@@ -297,11 +299,10 @@ class Post {
 
   public function deletePost($idPost, $idPoster){
     try {
-        if($idPoster == $_COOKIE['id']){
-        $this->bulk->update(['_id' => $idPost], ['$set' => ['state' => false]]);
-        $result = $this->manager->executeBulkWrite('db.users', $this->bulk, $this->writeConcern);
+      if($idPoster == $_COOKIE['id']){
+        $this->bulk->update(['internalId' => intval($idPost), 'createdBy'=>$idPoster ], ['$set' => ['state' => false]]);
+        $result = $this->manager->executeBulkWrite('db.posts', $this->bulk, $this->writeConcern);
         $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
-
         return true;
       }
       return false;
@@ -328,13 +329,17 @@ class Post {
 
   public function getCommits($idPost){
     try {
-      $filter = ["state" => true];
-      $options = [];
+      $filter = ["state" => true, 'postId' => $idPost];
+      $options = [
+        "limit" => 100
+      ];
 
       $query = new MongoDB\Driver\Query($filter, $options);
       $cursor = $this->manager->executeQuery('db.commits', $query);
 
-      return $cursor->toArray();
+      var_dump($cursor->toArray());
+
+      return true;
     } catch (Exception $e) {
       return [];
     }
