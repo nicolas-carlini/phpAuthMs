@@ -71,7 +71,7 @@ class User
         "name" => $name,
         "email" => $email,
         "password" => $this->hashPwd($pwd),
-        "validCode" => rand(10000, 99999),
+        "validCode" => $validCode,
         "confirmEmail" => false,
         "isAdmin" => false
       );
