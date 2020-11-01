@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   include '../../app/src/User.php';
   $post = new Post();
   try {
-    $payload = ["isPost" => $post->addPost(), "error" => false];
+    $payload = ["isPosts" => $post->getPosts(), "error" => false];
   } catch (Exception $e) {
     $payload = ["isPost" => false, "error" => true];
   } finally {

@@ -336,10 +336,8 @@ class Post {
 
       $query = new MongoDB\Driver\Query($filter, $options);
       $cursor = $this->manager->executeQuery('db.commits', $query);
-
-      var_dump($cursor->toArray());
-
-      return true;
+      
+      return $cursor->toArray();
     } catch (Exception $e) {
       return [];
     }
