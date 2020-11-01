@@ -45,7 +45,7 @@ class User
 {
   public function __construct()
   {
-    $this->manager = new MongoDB\Driver\Manager('mongodb+srv://nicolas:tkiGFGfVdyBvF18E@cluster0-qnsci.gcp.mongodb.net/PHPNGINX?retryWrites=true&w=majority');
+    $this->manager = new MongoDB\Driver\Manager('mongodb://191.168.0.2:27017');
     $this->writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
     $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
   }
@@ -233,7 +233,7 @@ class Post {
 
   public function __construct()
   {
-    $this->manager = new MongoDB\Driver\Manager('mongodb+srv://nicolas:tkiGFGfVdyBvF18E@cluster0-qnsci.gcp.mongodb.net/PHPNGINX?retryWrites=true&w=majority');
+    $this->manager = new MongoDB\Driver\Manager('mongodb://191.168.0.2:27017');
     $this->writeConcern = new MongoDB\Driver\WriteConcern(MongoDB\Driver\WriteConcern::MAJORITY, 1000);
     $this->bulk = new MongoDB\Driver\BulkWrite(['ordered' => true]);
   }
