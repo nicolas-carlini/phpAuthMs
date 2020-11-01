@@ -15,7 +15,7 @@ try {
   $validCode = $_POST["validcode"];
 
   if(isset($email ,$validCode)){
-    $payload = ["changePassword" => $User->confirmEmail($email, $validCode), "error" => false];
+    $payload = ["changePassword" => $User->confirmEmail($email, intval($validCode)), "error" => false];
   }else{
     $payload = ["changePassword" => false, "error" => true];
   }
