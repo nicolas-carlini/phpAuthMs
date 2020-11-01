@@ -154,8 +154,6 @@ class User
     $document = $cursor->toArray();
     $document = $document[0];
 
-    var_dump($document);
-
     return $document->validCode;
   }
 
