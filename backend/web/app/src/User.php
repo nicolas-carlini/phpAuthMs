@@ -162,7 +162,7 @@ class User
   //valida el codigo resivido 
   private function validCode($email, $validCode)
   {
-    return $this->getValidCode($email) == $validCode;
+    return $this->getValidCode($email) == intval($validCode);
   }
 
   //login reutilizable 
