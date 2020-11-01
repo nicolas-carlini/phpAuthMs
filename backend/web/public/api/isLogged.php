@@ -7,7 +7,6 @@ header('Access-Control-Allow-Methods: POST');
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
       $payload = ["isLogged" => isset($_COOKIE['id']), "error" => false];
   } catch (Exception $e) {
@@ -16,7 +15,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   } finally {
     echo json_encode($payload);
   }
-} else {
-  $payload = ["isLogged" => false, "error" => true];
-  echo json_encode($payload);
-}

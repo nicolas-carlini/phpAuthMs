@@ -8,17 +8,12 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  include '../../app/src/User.php';
-  $post = new Post();
-  try {
-    $payload = ["isPosts" => $post->getPosts(), "error" => false];
-  } catch (Exception $e) {
-    $payload = ["isPost" => false, "error" => true];
-  } finally {
-    echo json_encode($payload);
-  }
-} else {
+include '../../app/src/User.php';
+$post = new Post();
+try {
+  $payload = ["isPosts" => $post->getPosts(), "error" => false];
+} catch (Exception $e) {
   $payload = ["isPost" => false, "error" => true];
+} finally {
   echo json_encode($payload);
 }

@@ -8,24 +8,20 @@ header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  include '../../app/src/User.php';
-  $User = new User();
-  try {
-    $email = $_POST["email"];
-    $validCode = $_POST["validcode"];
+include '../../app/src/User.php';
+$User = new User();
+try {
+  $email = $_POST["email"];
+  $validCode = $_POST["validcode"];
 
-    if(isset($email ,$validCode)){
-      $payload = ["changePassword" => $User->confirmEmail($email, $validCode), "error" => false];
-    }else{
-      $payload = ["changePassword" => false, "error" => true];
-    }
-  } catch (Exception $e) {
+  if(isset($email ,$validCode)){
+    $payload = ["changePassword" => $User->confirmEmail($email, $validCode), "error" => false];
+  }else{
     $payload = ["changePassword" => false, "error" => true];
-  } finally {
-    echo json_encode($payload);
   }
-} else {
+} catch (Exception $e) {
   $payload = ["changePassword" => false, "error" => true];
+} finally {
   echo json_encode($payload);
 }
+
