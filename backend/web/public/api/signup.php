@@ -14,8 +14,6 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
     $name = $_POST["name"];
     $pwd = $_POST["pwd"];
 
-    var_dump($_POST);
-
     if(isset($pwd ,$email ,$name)){
       $payload = ["isRegistered" => $User->signup($email, $name, $pwd), "error" => false, "message"=>"Todo salio bien"];
     }
