@@ -15,12 +15,12 @@ try {
   $validCode = $_POST["validcode"];
 
   if(isset($email ,$validCode)){
-    $payload = ["changePassword" => $User->confirmEmail($email, intval($validCode)), "error" => false];
+    $payload = ["changePassword" => $User->confirmEmail($email, intval($validCode)), "error" => false, "message"=>"todo bien"];
   }else{
-    $payload = ["changePassword" => false, "error" => true];
+    $payload = ["changePassword" => false, "error" => true, "message" => "faltan datos"];
   }
 } catch (Exception $e) {
-  $payload = ["changePassword" => false, "error" => true];
+  $payload = ["changePassword" => false, "error" => true, "message"=>"error fatal"];
 } finally {
   echo json_encode($payload);
 }
