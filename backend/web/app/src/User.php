@@ -177,8 +177,17 @@ class User
     $document = $cursor->toArray();
     $document = $document[0];
 
-    setcookie('id', $document->_id, time()+(60*60*24*10));
-    setcookie('name', $document->name, time()+(60*60*24*10));
+    $arr_cookie_options = array (
+      'expires' => time() + 60*60*24*30,
+      'path' => '/',
+      'domain' => '.carlini.tech', // leading dot for compatibility or use subdomain
+      'secure' => true,     // or false
+      'httponly' => true,    // or false
+      'samesite' => 'None' // None || Lax  || Strict
+    );
+
+    setcookie('id', $document->_id, $arr_cookie_options);
+    setcookie('name', $document->name, $arr_cookie_options);
 
     return $this->unhashPwd($pwd,$document->password) == $pwd && $document->confirmEmail;
 
