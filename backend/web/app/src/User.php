@@ -189,8 +189,6 @@ class User
     setcookie('id', $document->_id, $arr_cookie_options);
     setcookie('name', $document->name, $arr_cookie_options);
 
-    var_dump($_COOKIE);
-
     return $this->unhashPwd($pwd,$document->password) == $pwd && $document->confirmEmail;
 
   }
