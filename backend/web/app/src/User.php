@@ -176,9 +176,9 @@ class User
 
     $document = $cursor->toArray();
     $document = $document[0];
-    
-    setcookie('id', $document->_id, time()+(60*60*24*365));
-    setcookie('name', $document->name, time()+(60*60*24*365));
+
+    setcookie('id', $document->_id, time()+(60*60*24*10));
+    setcookie('name', $document->name, time()+(60*60*24*10));
 
     return $this->unhashPwd($pwd,$document->password) == $pwd && $document->confirmEmail;
 
